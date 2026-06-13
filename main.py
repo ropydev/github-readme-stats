@@ -13,7 +13,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return False
+    return {"Author": "Ronald Bello (ropydev)", "author_github": "https://github.com/ropydev"}
 
 
 @app.get("/repos/pin")
