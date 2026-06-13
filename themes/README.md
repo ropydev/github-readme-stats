@@ -21,4 +21,4 @@ themes.json es el archivo con todos los temas visuales en formato json, contiene
 |---|---|
 | <img width="404" height="152" alt="algoliaTheme" src="https://github.com/user-attachments/assets/8c7eaf8a-b59c-4a27-bcad-900fa3c4b13c" /> | <img width="401" height="150" alt="github_darkTheme" src="https://github.com/user-attachments/assets/23930e06-6b56-48b4-a358-078ac1595df8" /> |
 
-Esos son solo algunos de los mas de 50 temas populares que hay en la API
+Esos son solo algunos de los mas de 60 temas populares que hay en la API
