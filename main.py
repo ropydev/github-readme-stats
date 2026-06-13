@@ -6,6 +6,7 @@ import textwrap
 import html
 import matplotlib.pyplot as plt
 import io
+import json
 
 app = FastAPI()
 
@@ -19,13 +20,23 @@ async def root():
 async def pinRepository(
     repo: str,
     username: str,
+    titleColor="0381e8",
     bgColor="FFFFFF",
     color="0381e8",
     borderColor="606060",
     borderWidth="3",
     borderHide=False,
+    theme=""
 ):
     try:
+        if theme:
+            with open("themes/themes.json", "r", encoding="utf-8") as f:
+                data = json.load(f)
+                theme = data[theme]
+            bgColor = theme["bg_color"]
+            titleColor = theme["title_color"]
+            color = theme["text_color"]
+            borderColor = theme["border_color"]
         headers = {"Accept": "application/vnd.github+json"}
         response = requests.get(
             f"https://api.github.com/repos/{username}/{repo}", headers=headers
@@ -58,7 +69,7 @@ async def pinRepository(
             svg += f"""</style>
 <g class="fadeIn">
 <rect x="0" y="0" width="400" height="150" rx="20" ry="20" fill="#{bgColor}" stroke="#{borderColor}" stroke-width="{borderWidth if not bool(borderHide) else "0"}"/>
-<text x="15" y="30" fill="#0381e8" font-family="Inter, sans-serif" font-size="18" font-weight="bold">
+<text x="15" y="30" fill="#{titleColor}" font-family="Inter, sans-serif" font-size="18" font-weight="bold">
 {repoName}
 </text>
 <text x="15" y="55" fill="#{color}" font-family="Inter, sans-serif" font-size="11">
@@ -84,8 +95,19 @@ forks:{data["forks"]}
 @app.get("/stats/commits-activity")
 async def activity(
     username,
-    title = "Commits Activity"
+    title = "Commits Activity",
+    titleColor="0381e8",
+    bgColor="FFFFFF",
+    color="0381e8",
+    theme=""
 ):
+    if theme:
+        with open("themes/themes.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+            theme = data[theme]
+        bgColor = theme["bg_color"]
+        titleColor = theme["title_color"]
+        color = theme["text_color"]
     headers = {"Accept": "application/vnd.github+json"}
     response = requests.get(f"https://api.github.com/users/{username}/repos")
     repos = response.json()
@@ -102,17 +124,17 @@ async def activity(
                 i+=1
     plt.style.use("seaborn-v0_8-dark")
     fig, ax = plt.subplots(figsize=(8, 3), dpi=120)
-    fig.patch.set_facecolor("#0B0C10")
-    ax.set_facecolor("#0B0C10")
-    ax.plot(days, commits, color="#FFFFFF", linewidth=2.5)
-    ax.scatter(days, commits, color="#FFFFFF", s=20, zorder=3)
+    fig.patch.set_facecolor(f"#{bgColor}")
+    ax.set_facecolor(f"#{bgColor}")
+    ax.plot(days, commits, color=f"#{titleColor}", linewidth=2.5)
+    ax.scatter(days, commits, color=f"#{titleColor}", s=20, zorder=3)
     for spine in ax.spines.values():
         spine.set_visible(False)
     ax.tick_params(left=False, bottom=False)
     ax.grid(False)
-    ax.set_xlabel("Days", fontsize=10, color="#E0E0E0", labelpad=5)
-    ax.set_ylabel("Commits", fontsize=10, color="#E0E0E0", labelpad=5)
-    ax.set_title(title, fontsize=12, color="#FFFFFF", pad=10)
+    ax.set_xlabel("Days", fontsize=10, color=f"#{color}", labelpad=5)
+    ax.set_ylabel("Commits", fontsize=10, color=f"#{color}", labelpad=5)
+    ax.set_title(title, fontsize=12, color=f"#{titleColor}", pad=10)
     svg_buffer = io.StringIO()
     plt.savefig(svg_buffer, format="svg", bbox_inches="tight")
     plt.close()
