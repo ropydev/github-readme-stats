@@ -4,8 +4,8 @@ from fastapi import FastAPI, Response
 import requests
 import textwrap
 import html
-import pygal
-from pygal.style import LightStyle
+import matplotlib.pyplot as plt
+import io
 
 app = FastAPI()
 
@@ -83,7 +83,8 @@ forks:{data["forks"]}
 
 @app.get("/stats/commits-activity")
 async def activity(
-    username
+    username,
+    title = "Commits Activity"
 ):
     headers = {"Accept": "application/vnd.github+json"}
     response = requests.get(f"https://api.github.com/users/{username}/repos")
@@ -99,29 +100,22 @@ async def activity(
             for d in l["days"]:
                 commits[i] += int(d)
                 i+=1
-    custom_style = LightStyle(
-        background='#000000',   # fondo transparente
-        plot_background='#606060',
-        foreground='#ffffff',       # texto blanco
-        foreground_strong='#ffffff',
-        foreground_subtle='#aaaaaa',
-        colors=('#FFFFFF',)         # color verde azulado (como tu paleta)
-    )
-
-    line_chart = pygal.Line(
-        style=custom_style,
-        show_legend=False,
-        show_y_guides=False,
-        show_x_guides=False,
-        dots_size=2,
-        stroke_style={'width': 2},
-        width=600,   # más ancho
-        height=150   # más bajo
-    )
-
-    line_chart.title = username+"'s Github Activity"
-    line_chart.x_labels = days
-    line_chart.add("", commits)
-
-    svg_data = line_chart.render()
-    return Response(content=svg_data, media_type="image/svg+xml")
+    plt.style.use("seaborn-v0_8-dark")
+    fig, ax = plt.subplots(figsize=(8, 3), dpi=120)
+    fig.patch.set_facecolor("#0B0C10")
+    ax.set_facecolor("#0B0C10")
+    ax.plot(days, commits, color="#FFFFFF", linewidth=2.5)
+    ax.scatter(days, commits, color="#FFFFFF", s=20, zorder=3)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.tick_params(left=False, bottom=False)
+    ax.grid(False)
+    ax.set_xlabel("Days", fontsize=10, color="#E0E0E0", labelpad=5)
+    ax.set_ylabel("Commits", fontsize=10, color="#E0E0E0", labelpad=5)
+    ax.set_title(title, fontsize=12, color="#FFFFFF", pad=10)
+    svg_buffer = io.StringIO()
+    plt.savefig(svg_buffer, format="svg", bbox_inches="tight")
+    plt.close()
+    svg_code = svg_buffer.getvalue()
+    svg_buffer.close()
+    return Response(content=svg_code, media_type="image/svg+xml")
