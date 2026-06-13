@@ -6,7 +6,7 @@ Inspirado en el repositorio ![anuraghazra/github-readme-stats](https://github.co
 ## Funciones
 ### **/repos/pin**
 
-<img width="411" height="157" alt="image" src="https://github.com/user-attachments/assets/b5e59c62-c8cb-47ad-a720-07ed93417392" />
+<img width="404" height="152" alt="screenshot" src="https://github.com/user-attachments/assets/0e1a44dc-d189-4d02-8d08-14b37fb8b74c" />
 
 Este endpoint permite mostrar una targeta con informacion basica de un repositorio
 <br>
@@ -17,22 +17,24 @@ username      # nombre del usuario al que pertenece el repo
 repo          # nombre del repositorio
 
 Opcionales:
+titleColor    # color del nombre del repositorio
 bgColor       # color del fondo de la targeta ej: bgColor=FFFFFF
 color         # color del texto de la targeta
 borderColor   # color del borde ej: borderColor=000000
 borderWidth   # ancho del borde
 borderHide    # si quieres mostrar el borde
+theme         # tema predefinido ej: dracula
 ```
 Ejemplos de uso:
 ```
 repos/pin?username=ropydev&repo=github-readme-stats&bgColor=000000&color=FFFFFF&borderColor=FFFFFF
 repos/pin?username=ropydev&repo=github-readme-stats&bgColor=000000&color=FFFFFF&borderHide=True
-repos/pin?username=ropydev&repo=github-readme-stats&bgColor=FFFFFF&color=606060&borderWidth=10
+repos/pin?username=ropydev&repo=github-readme-stats&theme=dracula
 ```
 
 ### **/stats/commits-activity**
 
-<img width="662" height="313" alt="screenshot" src="https://github.com/user-attachments/assets/69b40e71-ef9c-4385-a040-9bc372f97f6d" />
+
 
 Este endpoint permite mostrar una grafica estetica segun los ultimos 30 dias de commits del usuario
 <br>
@@ -43,6 +45,10 @@ username      # el nombre del usuario deseado
 
 Opcionales:
 title         # el titulo a mostrar de la grafica (por defecto "Commits Activity")
+theme         # tema predefinido ej: dracula
+titleColor    # color del titulo de la grafica
+bgColor       # color del fondo de la grafica
+color         # color del texto
 ```
 Ejemplos de uso:
 ```
