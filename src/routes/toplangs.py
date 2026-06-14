@@ -45,10 +45,7 @@ async def topLangs(
         lang: f"{round((size / total) * 100, 2)}%"
         for lang, size in lang_stats.items()
     }
-    numKeys = len(percentages)
-    if numKeys % 2 != 0:
-        numKeys+=1
-    ry = numKeys * 30 + 50
+    sortPercentages = sorted(percentages.items(), key=lambda x: float(x[1].strip('%')), reverse=True)
     svg = """<svg xmlns="http://www.w3.org/2000/svg" width="400" height="150">
 <style>
     .fadeIn {
@@ -68,10 +65,13 @@ async def topLangs(
 <text x="15" y="30" fill="#{titleColor}" font-family="Inter, sans-serif" font-size="18" font-weight="bold">
 {username}'s Top Langs
 </text>"""
-    y = 60
+    y = 80
     x = 40
     i = 0
-    for lang, percent in percentages.items():
+    total_width = 350
+    height = 10
+    x_offset = 25
+    for lang, percent in sortPercentages:
         langColor = themes.loadLangColor(lang.lower())
         svg += f"""<circle cx="{x-10}" cy="{y-4}" r="5" fill="#{langColor}" />
         <text x="{x}" y="{y}" fill="#{color}" font-family="Inter, sans-serif" font-size="14" font-weight="bold">
@@ -80,6 +80,10 @@ async def topLangs(
         i+=1
         x = 200 if i%2 != 0 else 40
         y = y+20 if i%2 == 0 else y
+        value = float(percent.strip('%')) / 100
+        width = total_width * value
+        svg += f'<rect x="{x_offset}" y="40" width="{width}" height="{height}" fill="#{langColor}"/>'
+        x_offset += width
 
     svg+="""</g>
 </svg>"""
