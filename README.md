@@ -6,7 +6,7 @@ Inspirado en el repositorio ![anuraghazra/github-readme-stats](https://github.co
 ## Funciones
 ### **/repos/pin**
 
-<img width="404" height="152" alt="screenshot" src="https://github.com/user-attachments/assets/0e1a44dc-d189-4d02-8d08-14b37fb8b74c" />
+![Example](assets/examples/repopin.png)
 
 Este endpoint permite mostrar una targeta con informacion basica de un repositorio
 <br>
@@ -34,8 +34,6 @@ repos/pin?username=ropydev&repo=github-readme-stats&theme=dracula
 
 ### **/stats/commits-activity**
 
-
-
 Este endpoint permite mostrar una grafica estetica segun los ultimos 30 dias de commits del usuario
 <br>
 Argumentos que recibe el endpoint:
@@ -56,12 +54,35 @@ Ejemplos de uso:
 /stats/commits-activity?username=ropydev&title=Example
 ```
 
+### Top Langs 
+
+![Example](assets/examples/toplangs.png)
+
+Este endpoint permite mostrar una targeta com mas de 60 temas disponibles con los lenguajes que usa un usuario y sus porcientos de uso
+<br>
+Argumentos que recibe el endpoint:
+```
+Obligatorios:
+username      # el nombre del usuario deseado
+
+Opcionales:
+theme         # tema predefinido ej: dracula
+titleColor    # color del titulo de la grafica
+bgColor       # color del fondo de la grafica
+color         # color del texto
+```
+Ejemplos de uso:
+```
+/top/langs?username=ropydev&theme=dark
+/top/langs?username=ropydev&bgColor=000000&color=ffffff&titleColor=ffffff
+```
+
 ## Instalacion y Uso
 ```
 git clone https://github.com/ropydev/github-readme-stats
 cd github-readme-stats
 pip install -r requirements.txt
-python -m uvicorn main:app --reload
+python -m uvicorn src.main:app --reload
 ```
 Esos comandos de consola descargan el repositorio usando git, instala sus dependencias y abre la api en local en 
-<code>http://127.0.0.1:8000/</code>
+<code>http://127.0.0.1:8000/</code> importante que sea src.main y no solo main

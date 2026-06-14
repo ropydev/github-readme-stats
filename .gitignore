@@ -1,2 +1,3 @@
-__pycache__/
-repo.json
+src/__pycache__/
+src/routes/__pycache__/
+src/services/__pycache__/
