@@ -19,6 +19,8 @@ async def pinRepository(
     try:
         if theme:
             theme = themes.loadTheme(theme)
+            if theme["error"]:
+                return theme["message"]
             bgColor = theme["bg"]
             titleColor = theme["title"]
             color = theme["text"]
